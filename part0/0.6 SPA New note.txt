@@ -1,0 +1,16 @@
+title 0.6 SPA: New Note
+
+note over browser:
+user writes text content and 
+clicks the submit button 
+end note
+
+note over browser:
+main.js dinamically creates the note, 
+adds it to the existing array of notes
+and renders the updated list of notes
+without requesting the whole website
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+server-->browser: JSON with a confirmation message
