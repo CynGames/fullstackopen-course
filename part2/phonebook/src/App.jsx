@@ -1,21 +1,33 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Filter from './Filter';
 import Form from './Form';
+import Notification from './Notification';
 import Numbers from './Numbers';
+
+import personService from './services/persons';
 
 const App = () =>
 {
 
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
-  ])
+  const [persons, setPersons] = useState([])
 
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
+
+  const [notificationMessage, setNotificationMessage] = useState(null);
+
+  const updateClient = () => 
+  {
+    personService
+      .getAllPersons()
+      .then(initialPersons => setPersons(initialPersons))
+  }
+
+  useEffect(() =>
+  {
+    updateClient()
+  }, [])
 
   const personsToShow = filter.length > 0
     ? persons.filter((person) => person.name.toLowerCase() === filter.toLowerCase())
@@ -25,17 +37,70 @@ const App = () =>
   {
     e.preventDefault();
 
-    if (persons.find((person) => newName === person.name))
+    const person = persons.find((person) => newName === person.name)
+
+    if (person)
     {
-      window.alert(`${newName} is already added to phonebook`);
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`))
+      {
+        const personObject = {
+          name: newName,
+          number: newNumber,
+          id: person.id
+        }
+
+        personService
+          .updatePerson(person.id, personObject)
+          .then(() =>
+          {
+            setNotificationMessage([`Updated ${newName} contact number`, `success`])
+
+            setTimeout(() =>
+            {
+              setNotificationMessage(null)
+            }, 5000)
+
+            return updateClient()
+          }).catch(() => 
+          {
+            setNotificationMessage([`Information of ${newName} has already been removed from server`, `failure`])
+
+            setTimeout(() =>
+            {
+              setNotificationMessage(null)
+            }, 5000)
+          })
+      }
+
       return;
     }
 
-    setPersons([...persons, { name: newName, number: newNumber }]);
+    const personObject = {
+      name: newName,
+      number: newNumber,
+      id: persons.length + 1
+    }
+
+    personService
+      .createPerson(personObject)
+      .then(returnedPersonObject =>
+      {
+        setNotificationMessage([`Added ${newName} to contact list`, `success`])
+
+        setTimeout(() =>
+        {
+          setNotificationMessage(null)
+        }, 5000)
+
+        return setPersons(persons.concat(returnedPersonObject))
+      })
   }
 
   return (
     <div>
+      { notificationMessage !== null
+        && <Notification message={ notificationMessage[0] } type={ notificationMessage[1] } /> }
+      
       <h2>Phonebook</h2>
       <Filter value={ filter } onChange={ (e) => setFilter(e.target.value) } />
 
@@ -48,8 +113,8 @@ const App = () =>
       />
 
       <h2>Numbers</h2>
-      <Numbers personsToShow={ personsToShow } />
-      
+      <Numbers personsToShow={ personsToShow } updateClient={ updateClient } />
+
     </div>
   )
 }

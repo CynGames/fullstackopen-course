@@ -39,9 +39,11 @@ const App = () =>
             randomNumber = Math.floor(Math.random() * (max - min) + min)
         }
 
+        
         return randomNumber
     }
 
+    
     const getHighestVoted = () => 
     {
         let highestVoted = points[0];
