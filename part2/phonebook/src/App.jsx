@@ -61,16 +61,16 @@ const App = () =>
             }, 5000)
 
             return updateClient()
-          }).catch((err) => 
-          {
-            // setNotificationMessage([`Information of ${newName} has already been removed from server`, `failure`])
-            setNotificationMessage([err.response.data, `failure`])
-
-            setTimeout(() =>
-            {
-              setNotificationMessage(null)
-            }, 5000)
           })
+          .catch(err =>
+            {
+              setNotificationMessage([err.response.data.error, `failure`])
+      
+              setTimeout(() =>
+              {
+                setNotificationMessage(null)
+              }, 5000)
+            })
       }
 
       return;
