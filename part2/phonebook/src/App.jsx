@@ -61,9 +61,10 @@ const App = () =>
             }, 5000)
 
             return updateClient()
-          }).catch(() => 
+          }).catch((err) => 
           {
-            setNotificationMessage([`Information of ${newName} has already been removed from server`, `failure`])
+            // setNotificationMessage([`Information of ${newName} has already been removed from server`, `failure`])
+            setNotificationMessage([err.response.data, `failure`])
 
             setTimeout(() =>
             {
@@ -92,15 +93,32 @@ const App = () =>
           setNotificationMessage(null)
         }, 5000)
 
-        return setPersons(persons.concat(returnedPersonObject))
+        setPersons(persons.concat(returnedPersonObject))
+
+        return updateClient()
+      })
+      .catch(err =>
+      {
+        console.log(err.response.data);
+
+        //Needs Testing
+        setNotificationMessage([err.response.data, `failure`])
+
+        setTimeout(() =>
+        {
+          setNotificationMessage(null)
+        }, 5000)
       })
   }
 
   return (
     <div>
+
+      UPDATED
+
       { notificationMessage !== null
         && <Notification message={ notificationMessage[0] } type={ notificationMessage[1] } /> }
-      
+
       <h2>Phonebook</h2>
       <Filter value={ filter } onChange={ (e) => setFilter(e.target.value) } />
 
