@@ -99,7 +99,7 @@ const App = () =>
       })
       .catch(err =>
       {
-        console.log(err.response.data);
+        console.log(err.error);
 
         //Needs Testing
         setNotificationMessage([err.response.data, `failure`])
@@ -113,8 +113,6 @@ const App = () =>
 
   return (
     <div>
-
-      UPDATED 10000000000000000000000000
 
       { notificationMessage !== null
         && <Notification message={ notificationMessage[0] } type={ notificationMessage[1] } /> }
