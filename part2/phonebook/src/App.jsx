@@ -104,6 +104,8 @@ const App = () =>
         console.log(err.response.data);
         console.log("---");
         console.log(err.error);
+        console.log("---");
+        console.log(err.response.data.error);
 
 
         //Needs Testing
