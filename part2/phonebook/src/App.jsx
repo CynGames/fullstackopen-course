@@ -99,10 +99,15 @@ const App = () =>
       })
       .catch(err =>
       {
+        console.log(err);
+        console.log("---");
+        console.log(err.response.data);
+        console.log("---");
         console.log(err.error);
 
+
         //Needs Testing
-        setNotificationMessage([err.response.data, `failure`])
+        // setNotificationMessage([err.response.data, `failure`])
 
         setTimeout(() =>
         {
