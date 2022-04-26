@@ -21,7 +21,7 @@
     "build:ui": "rm -rf build && cd ../phonebook/ && npm run build && cp -r build ../../../fullstackopen-course-backend/phonebook",
     "deploy:be": "cd ../../../fullstackopen-course-backend/phonebook && git add . && git commit -m svbuild && git push heroku master",
     "deploy:fe": "git add . && git commit -m uibuild && git push",
-    "deploy:full": "npm run build:ui && deploy:fe && npm run deploy:be",
+    "deploy:full": "npm run build:ui && npm run deploy:fe && npm run deploy:be",
     "logs:prod": "heroku logs --tail"
   },
   "eslintConfig": {
