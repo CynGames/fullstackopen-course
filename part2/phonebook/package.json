@@ -15,13 +15,14 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test", 
     "eject": "react-scripts eject",
     "server": "json-server -p3001 --watch db.json",
     "build:ui": "rm -rf build && cd ../phonebook/ && npm run build && cp -r build ../../../fullstackopen-course-backend/phonebook",
-    "deploy:be": "cd ../../../fullstackopen-course-backend/phonebook && git add . && git commit -m svbuild && git push heroku master",
-    "deploy:fe": "git add . && git commit -m uibuild && git push",
-    "deploy:full": "npm run build:ui && npm run deploy:fe && npm run deploy:be",
+    "deploy": "cd ../../../fullstackopen-course-backend/phonebook && git add . && git commit -m svbuild && git push -f heroku master",
+    "git-push:fe": "git add . && git commit -m uibuild && git push",
+    "git-push:be": "cd ../../../fullstackopen-course-backend/phonebook && git add . && git commit -m uibuild && git push -f origin master",
+    "deploy:full": "npm run build:ui && npm run deploy && npm run git-push:fe && npm git-push:be",
     "logs:prod": "heroku logs --tail"
   },
   "eslintConfig": {
